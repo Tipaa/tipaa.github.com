@@ -1,0 +1,88 @@
+/* CSS Document */
+@import url(http://fonts.googleapis.com/css?family=Audiowide);
+
+/*@variables
+{
+	VisualLightBlue: #6C8CD5;
+	VisualPale: #4671D5;
+	VisualBlue: #1240AB;
+	VisualDeepBlue: #2A4480;
+	VisualDarkBlue: #06266F;
+	
+	TiredContrast: #BF8F30;
+	DeepContrast: #A66F00;
+	Contrast: #FFAA00;
+	LightContrast: #FFBF40;
+	PaleContrast: #FFD073;
+}*/
+
+body
+{
+	background-color: #2A4480;
+	font-family: 'Audiowide', cursive;
+	color: #DDDDFF;
+}
+
+h2
+{
+	background-color: #6C8CD5;
+	width: 700px;
+	margin-left: 300px;
+	margin-top: 50px;
+	margin-bottom: 0px;
+	border: 25px;
+	border-color: #6C8CD5;
+	border-style: solid;
+}
+
+div, div.main, div.tail
+{
+	background-color: #1240AB;
+	width: 400px;
+	float: left;
+	margin-top: 50px;
+	margin-left: 300px;
+	xmargin-right: 300px;
+	border: 25px;
+	border-color: #1240AB;
+	border-style: solid;
+	height: 250px;
+	font-size:16px;
+}
+
+r
+{
+	text-align:right; float:right;
+}
+
+p
+{
+	margin-top: 0px;
+	margin-bottom: 15px;
+}
+
+div.tail
+{
+	background-color: #06266F;
+	border-color: #06266F;
+	margin-top: -75px;
+	height: 25px;
+	float:left;
+}
+
+a:link {color: #FFFFFF; text-decoration: none; }
+a:active {color: #FFFFFF; text-decoration: none; }
+a:visited {color: #FFFFFF; text-decoration: none; }
+a:hover {color: #FFFFFF; text-decoration: none; }
+
+div.right
+{
+	background-color: #4671D5;
+	width: 200px;
+	height: 375px;
+	float: left;
+	margin-left: 50px;
+	border: 25px;
+	border-color: #4671D5;
+	border-style: solid;
+}
