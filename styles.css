@@ -35,14 +35,33 @@ h2
 	border-style: solid;
 }
 
-div, div.main, div.tail
+div
+{
+	perspective: 800;
+	-webkit-perspective: 800;
+	-moz-perspective: 800;
+	-o-perspective: 800;
+	float: left;
+	margin-top: 50px;
+	margin-left: 300px;	
+	font-size:16px;
+	clear:: both;
+}
+
+div.container
+{
+	margin-top: 0px;
+	margin-left: 300px;
+}
+
+div.main, div.tail
 {
 	background-color: #1240AB;
 	width: 400px;
 	float: left;
 	margin-top: 50px;
-	margin-left: 300px;
-	xmargin-right: 300px;
+	xmargin-left: 300px;
+	margin-right: 50px;
 	border: 25px;
 	border-color: #1240AB;
 	border-style: solid;
@@ -75,14 +94,33 @@ a:active {color: #FFFFFF; text-decoration: none; }
 a:visited {color: #FFFFFF; text-decoration: none; }
 a:hover {color: #FFFFFF; text-decoration: none; }
 
-div.right
+div.tall
 {
 	background-color: #4671D5;
 	width: 200px;
 	height: 375px;
 	float: left;
-	margin-left: 50px;
+	margin-left: 0px;
 	border: 25px;
 	border-color: #4671D5;
-	border-style: solid;
+	border-style: solid;	
+}
+
+div.leftrot
+{
+	margin-left:-200px;
+	xwidth:200px;
+	-webkit-transition: -webkit-transform 1s ease-in-out;
+	-webkit-transform-origin: center center 100;
+	-webkit-transform: rotate3d(0, 1, 0, 85deg);
+  	transition: transform 1s ease-in-out;
+	transform: rotate3d(0, 1, 0, 80deg);
+}
+
+div.leftrot:hover
+{
+	-webkit-transition: -webkit-transform 1s ease-in-out;
+  	-webkit-transform: rotate3d(0, 1, 0, 0deg);
+  	transition: transform 1s ease-in-out;
+  	transform: rotate3d(0, 1, 0, 0deg);
 }
