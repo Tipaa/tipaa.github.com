@@ -1,0 +1,98 @@
+<html><head>
+<meta http-equiv='content-type' content='text/html; charset=UTF-8'>
+<title>Top-Down</title>
+<script type='text/javascript' src='jquery.js'></script>
+<script type='text/javascript'>
+$(window).load(function(){
+$(document).ready( function(){    
+    canvas = document.getElementById('tutorial');  
+    ctx = canvas.getContext('2d');
+    x = 250;
+    xSpeed = randomRange(-10,10);
+    // item as object
+    entityArray = [];
+        
+    anim = setInterval(tick,30);
+	move = setInterval(moveSpout,10000);
+    //draw();
+});
+
+var mousePos = { x:0, y:0 };
+var player = { x:0, y:0, weapon:{damage:10} };
+
+$(document).mousedown(function(e){
+      mousePos.x = e.pageX;
+      mousePos.y = e.pageY;
+	  player.x = e.pageX;
+	  player.y = e.pageY;
+	  registerEntity(new Entity(e.pageX,e.pageY));
+   }); 
+
+
+function registerEntity(ent) {
+	entityArray.push(ent);
+}
+
+function tick(){  
+    ctx.fillStyle = 'rgba(0,0,255,1)';     
+    ctx.fillRect(0,0,640,480);
+    ctx.fillStyle = 'white';
+    ctx.fillText(entityArray.length+' total Entities', 0,10);
+	var i;
+    for (i = 0; i < entityArray.length; i++){
+        ent = entityArray[i];
+        ctx.fillStyle = 'rgba(255,255,0,1)';
+		circle(player.x-ent.x+320,player.y-ent.y+240,10);
+		
+			var angle = Math.atan2(player.y-ent.y, player.x-ent.x);
+			ent.x+=ent.speed*Math.cos(angle);
+			ent.y+=ent.speed*Math.sin(angle);
+        
+    }
+}
+
+//function to get random number upto m
+function randomRange(minVal,maxVal,floatVal)
+{
+  var randVal = minVal+(Math.random()*(maxVal-minVal));
+  return typeof floatVal=='undefined'?Math.round(randVal):randVal.toFixed(floatVal);
+}
+    
+    function circle(x,y,r) {
+  ctx.beginPath();
+  ctx.arc(~~x, ~~y, r, 0, Math.PI*2, true);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function moveSpout() {
+	mousePos.x = randomRange(100,900);
+	mousePos.y = randomRange(100,600);
+}
+
+function Entity(dx, dy) {
+	var me = {
+		x:dx,
+		y:dy,
+		hp:1,
+		speed:1,		
+	};
+	me.draw=function() {
+			circle(player.x-this.x+320,player.y-this.y+240,10);
+			alert((player.x-this.x+320)+':'+(player.y-this.y+240));
+		};
+	me.update=function() {
+			var angle = Math.atan2(player.y-this.y, player.x-this.x);
+			this.x+=speed*Math.cos(angle);
+			this.y+=speed*Math.sin(angle);
+	};
+	return me;
+}
+
+}); 
+</script>
+</head>
+<body>
+  <canvas id='tutorial' width="640" height="480"></canvas>
+</body>
+</html>

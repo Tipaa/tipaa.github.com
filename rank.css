@@ -1,0 +1,18 @@
+body{
+	background-color:#0CF;
+	font-family:Verdana, Geneva, sans-serif;
+}
+
+table{
+	background-color:#0FC;
+}
+
+table tr{
+	border:thick;
+	border-bottom-color:#06C;
+	border-radius:3px;
+}
+
+#team, #chance {
+	font-size:22pt;
+}

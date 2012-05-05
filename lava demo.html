@@ -1,0 +1,108 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Lava Demo</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+$(window).load(function(){
+$(document).ready( function(){    
+    canvas = document.getElementById('tutorial');  
+    ctx = canvas.getContext('2d');
+    x = 250;
+    xSpeed = randomRange(-10,10);
+    // item as object
+    blobArray = [];
+        
+    anim = setInterval(draw,30);
+	move = setInterval(moveSpout,10000);
+    //draw();
+});
+
+var mousePos = { x:0, y:0 };
+
+$(document).mousedown(function(e){
+      mousePos.x = e.pageX;
+      mousePos.y = e.pageY;
+   }); 
+
+$(document).mousedown(function(e){
+    addBlob();
+});
+
+function addBlob(){
+    var blob = {
+        size : 10,
+        x : mousePos.x - 5,
+        y : mousePos.y - 5,
+        ySpeed : Math.tan(randomRange(-10,10,0.01))*2,
+        xSpeed : Math.tan(randomRange(-10.5,10.5,0.01))*3,
+                age:2
+    }; 
+    blobArray.push(blob);
+}
+
+function draw(){  
+    ctx.fillStyle = "rgba(0,0,0,0.2)";            
+    ctx.fillRect(0,0,1000,700);
+    addBlob();
+    ctx.fillStyle = "white";
+    ctx.fillText(blobArray.length+" total Blobs", 10,10);
+    for (var i = 0; i < blobArray.length; i++){
+        blob = blobArray[i];
+        ctx.fillStyle = "rgba(255,"+~~(128-(blob.age/4))+",0,"+(1-(i/1000)+0.2)+")";
+        circle(blob.x,blob.y, blob.size);
+        ctx.fillStyle = "black";
+        //ctx.fillText(blob.ySpeed+"\n"+blob.y, blob.x, blob.y);
+        blob.xSpeed *= 0.99;
+        blob.ySpeed *= 0.99;
+        if(blob.y<688)blob.ySpeed += 0.5;
+        //blob.size = blob.size * 0.98;
+        // delete blob if smaller than certain size
+        if (blob.size < 1 || ++blob.age>1000){
+           blobArray.splice(i,1);
+        }          
+        if((blob.x > 995&&blob.xSpeed>0)||(blob.x<5&&blob.xSpeed<0))
+        {
+           blob.xSpeed *= -0.7;
+        }
+        if((blob.y > 690&&blob.ySpeed>0)||(blob.y<10&&blob.ySpeed<0))
+        {
+           blob.xSpeed *= 0.95;
+           blob.ySpeed *= -0.5 * 0.95;
+        }
+        if(blob.ySpeed > -0.03 && blob.xSpeed < 0.03&&blob.y > 689)
+        {
+            //blob.ySpeed /= 10;
+        }
+        blob.xSpeed = ~~(blob.xSpeed*100)/100;        
+        blob.ySpeed = ~~(blob.ySpeed*5)/5;
+        blob.y = blob.y + blob.ySpeed;
+        blob.x = blob.x + blob.xSpeed;
+    }
+}
+
+//function to get random number upto m
+function randomRange(minVal,maxVal,floatVal)
+{
+  var randVal = minVal+(Math.random()*(maxVal-minVal));
+  return typeof floatVal=='undefined'?Math.round(randVal):randVal.toFixed(floatVal);
+}
+    
+    function circle(x,y,r) {
+  ctx.beginPath();
+  ctx.arc(~~x, ~~y, r, 0, Math.PI*2, true);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function moveSpout() {
+	mousePos.x = randomRange(100,900);
+	mousePos.y = randomRange(100,600);
+}
+
+}); 
+</script>
+</head>
+<body>
+  <canvas id="tutorial" width="1000" height="700"></canvas>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" type="text/css" href="rank.css"/>
+<script type="text/javascript" src="ranksystem.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Rank System</title>
+</head>
+
+<body>
+<form>
+<table>
+  <tr>
+    <td>Red Team</td>
+    <td>Levels</td>
+    <td>Blue Team</td>
+    <td>Levels</td>
+  </tr>
+  <tr>
+    <td>Red1</td>
+    <td><input type="text" onkeyup="javascript:amend();" id="r1" value="1" /></td>
+    <td>Blue1</td>
+    <td><input type="text" onkeyup="javascript:amend();" id="b1" value="1" /></td>
+  </tr>
+  <tr>
+    <td>Red2</td>
+    <td><input type="text" onkeyup="javascript:amend();" id="r2" value="1" /></td>
+    <td>Blue2</td>
+    <td><input type="text" onkeyup="javascript:amend();" id="b2" value="1" /></td>
+  </tr>
+  <tr>
+    <td>Red3</td>
+    <td><input type="text" onkeyup="javascript:amend();" id="r3" value="1" /></td>
+    <td>Blue3</td>
+    <td><input type="text" onkeyup="javascript:amend();" id="b3" value="1" /></td>
+  </tr>
+  <tr>
+    <td>Red4</td>
+    <td><input type="text" onkeyup="javascript:amend();" id="r4" value="1" /></td>
+    <td>Blue4</td>
+    <td><input type="text" onkeyup="javascript:amend();" id="b4" value="1" /></td>
+  </tr>
+</table>
+</form>
+<br />
+<a>The winning team is <a id="team">Red</a> winning one in every <a id="chance">1</a>.</a>
+<script type="text/javascript">
+
+function amend() {
+	red1 = new Player(document.getElementById("r1").value);
+	red2 = new Player(document.getElementById("r2").value);
+	red3 = new Player(document.getElementById("r3").value);
+	red4 = new Player(document.getElementById("r4").value);
+	
+	blue1 = new Player(document.getElementById("b1").value);
+	blue2 = new Player(document.getElementById("b2").value);
+	blue3 = new Player(document.getElementById("b3").value);
+	blue4 = new Player(document.getElementById("b4").value);
+	
+	blueTeam = new Team([blue1, blue2, blue3, blue4],"Blue");
+	
+	check();
+}
+
+function check() {
+	redTeam = new Team([red1,red2,red3,red4],"Red");
+	blueTeam = new Team([blue1, blue2, blue3, blue4],"Blue");
+	
+//	alert(getExpectedWinner(redTeam,blueTeam).winner.name+" with chance of "+getExpectedWinner(redTeam,blueTeam).chance);
+	document.getElementById("team").innerHTML = getExpectedWinner(redTeam,blueTeam).winner.name;
+	document.getElementById("chance").innerHTML = getExpectedWinner(redTeam,blueTeam).chance;
+}
+
+</script>
+</body>
+</html>

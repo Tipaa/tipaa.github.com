@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>HTML5 Canvas Test</title>
+</head>
+
+<body>
+    <div id="container" style="border:1px solid; cursor:none; width:480px; height:320px;">
+        <canvas id="canvas" width="480" height="320" >
+        </canvas>
+    </div>
+    <script type="text/javascript">
+// JavaScript Document
+
+
+var ctx = document.getElementById('canvas').getContext("2d");
+var ball = { position: { x: 0, y:0, z:0 }, velocity : { x:0, y:0, z:0 }, spin : { x: 0, y: 0 }, size: { radius: 0.05 } };
+var player1 = new Player();
+var player2 = new Player();
+var CANVAS_WIDTH = 480;
+var CANVAS_HEIGHT = 320;
+
+var net = { height: 0.9, width: 10, depth: 0.01 };
+
+init();
+
+function Player() {
+	return { position: { x:0, y:0, z:0 } };
+}
+
+function init() {
+	ball.position.x = 8;
+	ball.position.y = 5;
+	ball.position.z = 1.2;
+	ball.velocity.x = 0.2;
+  	ball.velocity.y = 0.5;
+	ball.velocity.z = 2;	
+	setInterval(draw, 10);
+}
+
+function draw() {
+	ctx.fillStyle = '#4f4';  
+    ctx.beginPath();    
+    ctx.rect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);  
+	ctx.closePath();  
+	ctx.fill();
+	
+	ball.velocity.x *= 0.999;
+	ball.velocity.y *= 0.999;
+	ball.velocity.z *= 0.9;
+	ball.velocity.z -= 0.04;
+	
+	if(ball.position.z < 0.05)
+	{
+		ball.velocity.z = ~~ (ball.velocity.z * 20)/20;
+		ball.velocity.z *= -1;
+		ball.velocity.x += ball.spin.x;
+		ball.velocity.y += ball.spin.y;
+		ball.velocity.x *= 0.9;
+		ball.velocity.y *= 0.9;
+	}
+	if(ball.position.x < 0 || ball.position.x > 48)
+	{
+		ball.velocity.x *= -1;
+	}
+	if(ball.position.y < 0 || ball.position.y > 32)
+	{
+		ball.velocity.y *= rand(-3);//-1;
+	}
+	if(ball.position.z < net.height + 0.1 && (ball.position.y > 15.8 && ball.position.y < 16.2))
+	{
+		ball.velocity.y *= -1;
+	}
+	ball.position.x += ball.velocity.x;
+	ball.position.y += ball.velocity.y;
+	ball.position.z += ball.velocity.z;
+	drawBall(ball);
+}
+
+function drawBall(ball) {
+	ctx.fillStyle = '#f82';
+	circle(ball.position.x*10, ball.position.y * 10 - ball.position.z * 4, 5);
+}
+
+function circle(x,y,r) {
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI*2, true);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function rand(i) {
+	return Math.floor(Math.random()*i)
+}
+
+function OnKeyPress(key) {
+	
+}</script>
+</body>
+</html>
