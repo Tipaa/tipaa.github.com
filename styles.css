@@ -20,6 +20,7 @@ body
 {
 	background-color: #2A4480;
 	font-family: 'Audiowide', cursive;
+	font-size: 16pt;
 	color: #DDDDFF;
 }
 
@@ -35,6 +36,19 @@ h2
 	border-style: solid;
 }
 
+h1
+{
+	background-color: #6C8CD5;
+	width: 700px;
+	margin-left: 300px;
+	margin-top: 50px;
+	margin-bottom: 0px;
+	border: 25px;
+	border-color: #6C8CD5;
+	border-style: solid;
+	font-size:36pt;
+}
+
 div
 {
 	perspective: 800;
@@ -46,6 +60,11 @@ div
 	margin-left: 300px;	
 	font-size:16px;
 	clear:: both;
+}
+
+#cycle
+{
+	font-size: 14pt;
 }
 
 div.container

@@ -41,7 +41,7 @@
 				return;
 			}
 
-			var answer = confirm('This page refresher must not be used for malicious purposes.\nLazyWebTools (original cycle.js) and Tipaa (bookmarkeltising it) are not responsible for the use of this tool.\nPlease note that when using this tool it is still YOUR IP address that hits the target site.\nBy hitting OK you can continue to use the tool and you agree that you are not using this tool for malicious purposes.\n\nContinue?')
+			var answer = confirm('This page refresher must not be used for malicious purposes.\nLazyWebTools (original cycle.js) and Tipaa (bookmarkeltising it) are not responsible for your usage of this tool.\nBy hitting OK you agree to use the tool legally and you agree that you are not using this tool for malicious purposes.\n\nContinue?')
             if (!answer)
 		    {
 				return;
