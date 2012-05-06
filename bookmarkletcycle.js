@@ -22,9 +22,6 @@
 		else
 		{
 			reset();
-
-			refresh = 5;
-
 			separate = 0;
 			toolbar  = 1;
 			refresh  = prompt('Refreshing interval',50);
@@ -81,10 +78,7 @@
 			{
 				if ( windows[0] && !windows[0].closed )
 				{
-			        if ( currentURL == numURLs )
-		            {
-			            currentURL = 0;
-		            }
+			        currentURL %= numURLs
 					windows[0].location.href = urls[currentURL];
 					currentURL++;
 				}
