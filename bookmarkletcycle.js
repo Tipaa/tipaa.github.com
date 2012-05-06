@@ -14,6 +14,7 @@
 	{
 		input    = prompt('Give the URLs to cycle. Split them with a , between each one','www.bbc.co.uk');
 		urls = String(input).split(',');
+		urls.splice(urls.length, 1);
 		//alert('Status ' + windows[0] + ' and ' + windows[0].closed );
 		if ( windows[0] && !windows[0].closed )
 		{
