@@ -1,0 +1,12 @@
+#footer
+{
+    clear: both;
+    padding: 0;
+    text-align: left;
+    vertical-align: bottom;
+    line-height: normal;
+    margin: 0;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+}

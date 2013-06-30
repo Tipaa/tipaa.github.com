@@ -1,0 +1,11 @@
+BlogTest2: Syntax Highlighting\
+Body
+<code>public Something makeSomething(Somethingelse e)
+{
+	val s = new Something(e);
+	return this.process(s);
+}</code>\
+.this, .public, .return
+{
+	color:red;
+}
