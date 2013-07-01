@@ -117,15 +117,19 @@ def preprocess(text):
 		else:
 			out += t
 		iscode = not iscode		
-	return out
+
+	return out.replace('</<','&lt;/<').replace('\n','<br>').replace('\r','').replace('\t','&nbsp;&nbsp;&nbsp;&nbsp;')
 	
 def codetohtml(text):
 	out = ''
-	words = re.findall('([a-zA-Z][a-zA-Z0-9]*)',text)
+	text = text.replace('{','&#123;').replace('}','&#125;').replace('<!','&gt;!')
+	words = re.findall('([a-zA-Z][a-zA-Z0-9]*)',text)	
 	wordlist = [w for w in words]
 	index = 0
 	text = "<code>" + text + "</code>"
 	for w in wordlist:				
+		if w == None:
+			continue
 		text = text[:index] + text[index:].replace(w, "<a class=\""+w+"\">"+w+"</a>",1)
 		index += text[index:].index("<a class=\""+w+"\">"+w+"</a>")+len("<a class=\""+w+"\">"+w+"</a>")
 	return text
@@ -246,12 +250,13 @@ def main():
 		for f in files:
 			if guard.ok(f):
 				mfiles[f] = f[:f.rfind('.')]+".html"
-				parts = re.split("\\\\\n",io.open(f,'rb').read())
+				parts = re.split("\\\\\\\\\n",io.open(f,'rb').read())
 				title = parts[0]
-				text = preprocess(parts[1])
+				text = preprocess(parts[1][1:])
 				style = (parts[2] if (len(parts)>2) else "")
 				html1 = html.format(title=title, style=style, text=text)
-				print f,html1,output(f[:f.rfind('.')]+".html",html1,True)
+				print parts[0][:10]
+				output(f[:f.rfind('.')]+".html",html1,not parts[1][0]== '-')
 				
 		if not fcontents == "none":
 			html = io.open("contents.pyml",'rb').read()
@@ -261,11 +266,10 @@ def main():
 			html1 = html.format(title=title, style=style, contents=hash)
 			output(fcontents+".html",html1)
 	
-def output(file,html,doparse = True):
-	
+def output(file,html,doparse = True):	
 	if doparse:
 		html = parse(html)
-	
+	print '<!' in html
 	#print html
 	
 	with io.open(file, 'wb') as ffile:
