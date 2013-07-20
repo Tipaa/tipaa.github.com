@@ -15,7 +15,8 @@ In this case, the method ig.A() is renamed by MCP to EntityPlayerSP.isOnLadder()
 //Old EntityPlayerSP.isOnLadder()
 public boolean isOnLadder()
 {
-	if (worldObj.getBlockId(i,j,k) == Block.ladder.blockID||worldObj.getBlockId(i,j+1,k) == Block.ladder.blockID)
+	if (worldObj.getBlockId(i,j,k) == Block.ladder.blockID
+		||worldObj.getBlockId(i,j+1,k) == Block.ladder.blockID)
 	{
 	   	return true;
 	}
