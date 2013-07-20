@@ -106,32 +106,52 @@ def parse(script):
 	return out
 	
 def preprocess(text):
-	text = re.split('(<code>)|(</code>)',text)
-	iscode = False
+	text = re.split('(<code>)|(</code>)|(`)',text)
+	block = 1
+	inline = 2
+	iscode = 0
 	out = ''
 	for t in text:
-		if t == None or t == "<code>" or t == "</code>":
+		if t == None:
 			continue
-		elif iscode:
-			out += codetohtml(t)	
+		elif t=='`':
+			iscode = inline - iscode
+		elif t == "<code>" or t == "</code>":
+			iscode = block - iscode
+			
+		if t == "<code>" or t == "</code>" or t=="`":
+			None
+		elif iscode > 0:
+			out += codetohtml(t,iscode)
 		else:
 			out += t
-		iscode = not iscode		
 
-	return out.replace('</<','&lt;/<').replace('\n','<br>').replace('\r','').replace('\t','&nbsp;&nbsp;&nbsp;&nbsp;')
+	return out.replace('</<','&lt;/<').replace('\n','<br>&nbsp;&nbsp;&nbsp;&nbsp;').replace('\r','').replace('\t','&nbsp;&nbsp;&nbsp;&nbsp;')
 	
-def codetohtml(text):
+def codetohtml(text,type):
+	block = 1
+	inline = 2
 	out = ''
-	text = text.replace('{','&#123;').replace('}','&#125;').replace('<!','&gt;!')
+	text = text.replace('{','&#123;').replace('}','&#125;')
 	words = re.findall('([a-zA-Z][a-zA-Z0-9]*)',text)	
+	
 	wordlist = [w for w in words]
 	index = 0
-	text = "<code>" + text + "</code>"
+	text = ("<pre>" if type == block else "")+"<code>" + text.replace('<!','&lt;!') + "</code>"+("</pre>" if type == block else "")
 	for w in wordlist:				
 		if w == None:
 			continue
-		text = text[:index] + text[index:].replace(w, "<a class=\""+w+"\">"+w+"</a>",1)
-		index += text[index:].index("<a class=\""+w+"\">"+w+"</a>")+len("<a class=\""+w+"\">"+w+"</a>")
+		text = text[:index] + text[index:].replace(w, "<a class=^"+w+"^>"+w+"</a>",1)
+		index += text[index:].index("<a class=^"+w+"^>"+w+"</a>")+len("<a class=^"+w+"^>"+w+"</a>")
+	index = 0
+	strings = re.findall('(".*?")',text)
+	for s in strings:
+		if s == None or s not in text:
+			continue
+		newtext = "<span class=\"string\">"+s+"</span>"
+		text = text[:index] + text[index:].replace(s, newtext,1)		
+		index += text[index:].index(newtext)+len(newtext)	
+	text = text.replace('^','"')
 	return text
 	
 	
@@ -233,7 +253,7 @@ def main():
 	fcontents = argm[':c'] if ':c' in argm else "none"
 		
 	htmlgen = MultiPurposeGenerator()
-	parse(html.format(title='',style='',text=''))
+	parse(html.format(title='',style='',text='',contents='{}'))
 	if mode == "once":
 		print "\n"+'-'*30+"\n"
 		title = raw_input("Page title:\n")
@@ -241,22 +261,24 @@ def main():
 		
 		text = htmlgen.htmlify(htmlgen.generate())
 		
-		html1 = html.format(title=title, style=style, text=text)
-		output(file,html,title,text,style)
+		html1 = html.format(title=title, style=style)
+		output(file,html,True,text)
 	
 	elif mode == "all":
 		files = os.listdir(os.getcwd())
 		mfiles = {}
 		for f in files:
-			if guard.ok(f):
+			if f.endswith('.blog'):
 				mfiles[f] = f[:f.rfind('.')]+".html"
+			
+		for f in files:
+			if guard.ok(f):
 				parts = re.split("\\\\\\\\\n",io.open(f,'rb').read())
 				title = parts[0]
 				text = preprocess(parts[1][1:])
 				style = (parts[2] if (len(parts)>2) else "")
-				html1 = html.format(title=title, style=style, text=text)
-				print parts[0][:10]
-				output(f[:f.rfind('.')]+".html",html1,not parts[1][0]== '-')
+				html1 = html.replace('{title}',title).replace('{style}',style).replace('{contents}',str(mfiles))#format(title=title, style=style, text='{text}', contents=str(mfiles))
+				output(mfiles[f],html1,not parts[1][0]== '-',text)
 				
 		if not fcontents == "none":
 			html = io.open("contents.pyml",'rb').read()
@@ -266,11 +288,12 @@ def main():
 			html1 = html.format(title=title, style=style, contents=hash)
 			output(fcontents+".html",html1)
 	
-def output(file,html,doparse = True):	
+def output(file,html,doparse = True,text=''):	
 	if doparse:
-		html = parse(html)
-	print '<!' in html
-	#print html
+		html = parse(html.replace('{text}',text))
+	elif '{text}' in html:
+		phtml = parse(html).replace('{text}',text)		
+		html = phtml
 	
 	with io.open(file, 'wb') as ffile:
 		ffile.write(html)
@@ -278,3 +301,4 @@ def output(file,html,doparse = True):
 		
 if __name__ == "__main__":
 	main()
+	print "Completed with no errors"

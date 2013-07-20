@@ -1,0 +1,108 @@
+Minecraft Mod Review: ClimbCraft\\
+-<h1>Climbcraft</h1>
+Climbcraft was my first mod. People had been asking if they could have a grappling/climbing mod for scaling the steep cliffs present in the Alpha & early Beta world generator, so I decided that once I knew enough Java to find my way around, I'd try it out.
+Recently, spiders had been given the ability to scale walls and climb cliffs, so I looked at how that was done, and emulated it.
+<code>
+//EntitySpider.isOnLadder()
+public boolean isOnLadder()
+{
+	return isCollidedHorizontally;
+}
+</code>
+MCP (the Minecraft Coder's Pack) is what nearly all modders use to modify the game, since the actual java bytecode is obfuscated. MCP adds another decompilation step over just using JAD (or Fernflower, on 7.2+), where it annotates any OpenGL constants and renames fields, classes and methods from the obfuscated a.b(c,d) style to readable Java, using community mappings. Whenever Minecraft updated, the mods had to too, since the obfuscation changed (class a could go from ItemArmor to BlockFluid to RenderParticle) I helped with some of these mappings early on, as have most modders from that time - only a couple of people were able to make their mods without MCP (they had their own custom toolchains), so helping establish mappings made the update process much quicker for the rest of us.
+In this case, the method ig.A() is renamed by MCP to EntityPlayerSP.isOnLadder(), which is queried once per tick in the update() method. It meant that the spiders would climb any walls that they were touching, giving them a more spiderlike quality. The player method for this looked a bit different to the spider's, as it also checked that the player was inside a ladder block. Minecraft checks being inside a ladder block because the ladder is a hollow block, and Minecraft, being voxel based, can't have two blocks in the same space at the same time. This means that a ladder on a wall takes up an entire 1m by 1m by 1m cube in game and in memory, and the collision box is on the outside edge, extending inwards. To turn the player's motion into that of a spider's, I simply copied the spider code into the player class.
+<code>
+//Old EntityPlayerSP.isOnLadder()
+public boolean isOnLadder()
+{
+	if (worldObj.getBlockId(i,j,k) == Block.ladder.blockID||worldObj.getBlockId(i,j+1,k) == Block.ladder.blockID)
+	{
+	   	return true;
+	}
+	return false;
+}
+</code>
+So I switched these up, and the player behaved like a spider. It was pretty much <i>always</i> on a ladder when on uneven terrain, so jumping was harder to miss, but also much slower for general movement (update() would reduce horizontal velocity massively while on a ladder).
+To fix this, I, in my state of being totally new to programming Java and completely unaware of basic computer science concepts, fixed this by checking every block around me to see if there was a 'climbable' block. If there was, it would be like rock climbing. If there wasn't however, it would be like the mod simply wasn't there.
+<code>
+//Climbcraft isOnLadder()
+public boolean isOnLadder()
+{
+	int i = MathHelper.floor_double(posX);
+	int j = MathHelper.floor_double(boundingBox.minY);
+	int k = MathHelper.floor_double(posZ);
+	if (!onGround)
+	{
+		if (worldObj.getBlockId(i,j,k+1) == Block.cobblestone.blockID ){
+			return true;
+		}
+		if (worldObj.getBlockId(i,j,k-1) == Block.cobblestone.blockID ){
+			return true;
+		}
+		if (worldObj.getBlockId(i+1,j,k) == Block.cobblestone.blockID ){
+			return true;
+		}
+		if (worldObj.getBlockId(i-1,j,k) == Block.cobblestone.blockID ){
+			return true;
+		}
+		if (worldObj.getBlockId(i,j+1,k+1) == Block.cobblestone.blockID ){
+			return true;
+		}
+		if (worldObj.getBlockId(i,j+1,k-1) == Block.cobblestone.blockID ){
+			return true;
+		}
+		if (worldObj.getBlockId(i+1,j+1,k) == Block.cobblestone.blockID ){
+			return true;
+		}
+		if (worldObj.getBlockId(i-1,j+1,k) == Block.cobblestone.blockID ){
+			return true;
+		}
+		if (worldObj.getBlockId(i,j+2,k) == Block.cobblestone.blockID ){
+			return true;
+		}
+		...
+		//Repeat another 16 times
+</code>
+I did that for each of the 16 or so blocks that existed in B1.2_02 that were deemed 'climbable' by me or the other forum posters. It screams of inefficiency and ugliness to me now, but to a freshly-15-year-old me who had only ever written in QBASIC beforehand, this was a way that <i>worked</i>.
+This was probably pretty bad for performance, too - each `worldObj.getBlockId()` would run through for or five layers of redirection before hitting the block array. Caching these results would have dramatically improved speeds over this section.
+Don't worry, though - a month later I scrapped this code in favour of
+<code>
+public boolean isOnLadder()
+{
+	int i = MathHelper.floor_double(posX);
+	int j = MathHelper.floor_double(boundingBox.minY);
+	int k = MathHelper.floor_double(posZ);
+	if (!onGround)
+	{
+		return super.isOnLadder() && (isClimbable(worldObj.getBlockId(i-1,j+1,k))
+				||isClimbable(worldObj.getBlockId(i+1,j+1,k))||isClimbable(...
+	}
+}
+</code>
+This was more readable code, and was easier for me to upgrade later on, when I wanted to create the Spidercraft (and later on, Le Parkour) mod. Now though, I'd go for more functions to reduce the cruft on checking all the blocks match any of the block types. Then I could do a `for each` on all the blocks in the vicinity and then check if they match `isClimbable()`. This would have the added bonus of being much more reuseable than my older code, and probably a bit faster, too.
+Once the mod was at this stage, it was release ready - it worked as intended. There were still issues to sort out, such as fall damage - when you stopped moving into the wall to climb, you would fall as if you weren't climbing at all, instead of climbing back down. I eventually fixed this by removing the `isCollidingHorizontally` check, since it was only `true` when the player was climbing upwards.
+
+This mod was mildly popular at first, gaining ~1000 downloads in total in the first version of Minecraft it was available on (Minecraft Beta 1.2_02). It helped that I listened to suggestions of which blocks should be climbable (like brick or mossy cobblestone). At this stage, I was one of 20-40 modders who had released mods, and the modding section of the forums had only just been formed, so the community was still small. The community started to grow massively after about 1.3 or 1.4, but during 1.2, the pool of people was still less than 10,000 users and less than 50 modders with public releases.
+
+
+Once Beta 1.3 came out, the rush to update was upon us. Mods were starting to get noticed now, and the obfuscation changed every update. This meant that we had to wait for the MCP team to be done, so that our toolkit was ready (we (#mcp on irc.esper.net) helped a lot of mappings from this point onwards, and around this time MCPBot was written) and we could recompile to the new source mappings.
+Since 1.2 (and the Alpha 1.2.6 that I had been experimenting on for the very first week), I had learnt a bit about Java that QBASIC lacked, such as encapsulation, basic object-orientation and method overloading. I also learned the `switch` statement, so that my code was less than the original one-hundred-and-something `if`s I had before.
+In Beta 1.3, I started working on Spidercraft as more than a gag mod also, as it proved to be as popular as Climbcraft was (at this point, there were no real (free or public) building cheats other than infinite blocks and spidercraft). It went on to a brief collaboration with KaiemahiVector, a modder with few mods to his name, but a ton of expertise. This collaboration became Spidercraft Unleashed, which allowed ceiling-hanging and climbing over overhanging ledges, two feats previously impossible to do due to the physics engine implementation.
+Minecraft happens to use the fast and efficient Axis-Aligned Bounding Box collision detection technique, which is all that Minecraft's rudimentary physics required. However, it meant that when turning a corner, at some point the player and the wall or ledge must no longer be in contact, since all collision planes were parallel.
+To solve this, KaiemahiVector checked for a block existing in the space diagonally up from the cube the head occupies, for this is where a ledge would be if there was to be a ledge.
+
+Finally, during Beta 1.3 I added a button to toggle the climbing ability. This meant that normal gameplay could be achieved without uninstalling or reinstalling mods, and since buttons were the frontier at that time, every modder on IRC seemed to want to have them. This was one of the most fun things about the obfuscation Notch used - you had to reverse engineer any code that hadn't already been mapped (less than 40% of the code actually was mapped around B1.2_02), which you could then use freely to create something previously impossible. It created small rushes to decompose new classes and methods, as well as existing conundrums like the Model code. Whoever won these rushes would then get mod exclusivity for that topic for a while until others found out how to do it, and they would contribute and give back to the obfuscation mappings and IRC users using MCPBot, letting others use the code they had just oncovered.
+
+As a small aside, I find DrZhark's Mo' Creatures mod incredibly fascinating for these purposes, for he pretty much singlehandedly waded through the jungle of entity behaviour and model rendering months before anyone else could. He declared just before Christmas 2010 his intent to create a new animal, and within about two months, had a fully functional set of animals, with their own textures, models and AIs. The most impressive thing about this is how nearly all of the code he was manipulating and reflecting into was unmapped and still obfuscated, meaning that his reverse engineering skills must have been remarkably good. His work helped uncover a series of about 20-30 classes, many tens of methods, and hundreds of obfuscated class fields.
+
+The Beta 1.3 updates marked where I started becoming known on the forums outside of the modding section, and I rose to a small level of prominence within the wider playerbase. I also started getting download counts in the thousands. This was where the small modding community started to become something much bigger.
+Climbcraft remained largely unchanged after this, as I went on to writing more interesting and more challenging mods.
+\\
+.public, .return, .boolean, .if, .super, .this, .true, .false, .int, .float, .double, .for, .switch
+{
+	color:purple;
+}
+.string
+{
+	color:green;
+}

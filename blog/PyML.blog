@@ -1,0 +1,35 @@
+PyML\\
+-PyML is a markup system I have created, inspired by PHP. It runs with Python embedded into an html file, and can be either statically processed by the htmlgen.py Python program, or on the fly by similar means.
+It can either use a template, like I am for my blog, or it can use individual files for each page, akin to php. It looks like
+<code>
+<html>
+<head><title>{title} | Example PyML page</title>
+<style>{style}</style>
+</head>
+<body>
+<ol>
+<!
+customers = {text}
+for cust in customers:
+	echo("<li>"+cust+"</li>")
+!>
+</ol>
+<p>Most recent order: <!echo({text}[0])!></p>
+</html>
+</code>
+In PyML, we have three main tags used by the Python engine: <code>title, style and content</code>. The title is the tite given by the imported texts, the style is the accompanied stylesheet, and text is the main body of the imput from file that you use. The tag <code>contents</code> is used instead of text in the contents template, contents.pyml.
+PyML is still in sporadic development, so this is by no means final. But it already is proving very useful for filling the php niche without being php.
+\\
+.html, .head, .title, .style, .body, .ol, .p, .for, .in, .echo
+{
+	color:blue;
+}
+.string
+{
+	color:green;
+}
+code
+{
+	color:black;
+	font-family:Courier New, Courier, Mono;
+}

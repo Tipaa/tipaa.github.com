@@ -6,7 +6,64 @@
     vertical-align: bottom;
     line-height: normal;
     margin: 0;
+	padding-left:5px;
     position: fixed;
     bottom: 0px;
     width: 100%;
+	background-color: #ffffff;
+	border-top:solid 2px #996666;
+}
+#right {
+	float:left;
+	margin-left:80%;
+	position:fixed;
+}
+
+body {
+	background-color: #e1ddd9;
+	font-size: 11pt;
+	font-family: Helvetica, Arial, Sans;
+	padding:0;
+	margin:0;
+	
+	}
+	
+li {
+	list-style-type:none;
+}
+#center {
+	float:left;
+	width:70%;
+	background:#fff;
+	border-right:2px solid #996666;
+	border-bottom:2px solid #996666;
+	margin-left:10%;
+	margin-right:15px;
+	padding-bottom:20px;
+}
+
+#content {
+	margin:15px;
+}
+
+h1 {
+font-size:24pt;
+color:#555;
+border-bottom:solid 5px #555;
+}
+
+
+code
+{	
+	font-size:10pt;
+	color:black;
+	font-family:Courier New, Courier, Mono;
+}
+
+pre
+{
+	margin-left:5%;
+	background:solid;
+	background-color:#e1ddd9;
+	width:80%;
 }
