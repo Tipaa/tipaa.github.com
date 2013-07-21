@@ -248,7 +248,7 @@ def main():
 			last = None
 			
 	
-	file = argm[':f'] if ':c' in argm else "_._"#(sys.argv[1] if len(sys.argv)>1 else raw_input("File name:"))+".html"
+	file = argm[':f'] if ':f' in argm else "_._"#(sys.argv[1] if len(sys.argv)>1 else raw_input("File name:"))+".html"
 	mode = argm[':m']#(sys.argv[2] if len(sys.argv)>2 else "once")
 	fcontents = argm[':c'] if ':c' in argm else "none"
 		
@@ -267,9 +267,13 @@ def main():
 	elif mode == "all":
 		files = os.listdir(os.getcwd())
 		mfiles = {}
+		ftitles = {}
 		for f in files:
 			if f.endswith('.blog'):
 				mfiles[f] = f[:f.rfind('.')]+".html"
+			if guard.ok(f):
+				parts = re.split("\\\\\\\\\n",io.open(f,'rb').read())
+				ftitles[mfiles[f]] = parts[0]
 			
 		for f in files:
 			if guard.ok(f):
@@ -277,13 +281,13 @@ def main():
 				title = parts[0]
 				text = preprocess(parts[1][1:])
 				style = (parts[2] if (len(parts)>2) else "")
-				html1 = html.replace('{title}',title).replace('{style}',style).replace('{contents}',str(mfiles))#format(title=title, style=style, text='{text}', contents=str(mfiles))
+				html1 = html.replace('{title}',title).replace('{style}',style).replace('{contents}',str(ftitles))#format(title=title, style=style, text='{text}', contents=str(mfiles))
 				output(mfiles[f],html1,not parts[1][0]== '-',text)
 				
 		if not fcontents == "none":
 			html = io.open("contents.pyml",'rb').read()
 			title = "Contents"
-			hash = str(mfiles)
+			hash = str(ftitles)
 			style = ""
 			html1 = html.format(title=title, style=style, contents=hash)
 			output(fcontents+".html",html1)

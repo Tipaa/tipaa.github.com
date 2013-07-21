@@ -14,9 +14,13 @@
 	border-top:solid 2px #999999;
 }
 #right {
-	float:left;
-	margin-left:80%;
-	position:fixed;
+color: rgb(0, 0, 0);
+display: block;
+float: left;
+padding-top: 10px;
+vertical-align: baseline;
+width: 15%;
+zoom: 1;
 }
 
 body {
@@ -28,56 +32,54 @@ body {
 	
 	}
 	
-li {
-	list-style-type:none;
-}
 #center {
 	float:left;
-	width:50%;
+	width:45%;
 	background:#fff;
 	padding-bottom:20px;
+	margin-left:20%;
 }
 
 #content {
-	border-bottom-color: rgb(0, 0, 0);
-border-bottom-style: none;
-border-bottom-width: 0px;
+	border-bottom-color: rgb(226, 226, 226);
+border-bottom-style: solid;
+border-bottom-width: 1px;
 border-image-outset: 0px;
 border-image-repeat: stretch;
 border-image-slice: 100%;
 border-image-source: none;
 border-image-width: 1;
-border-left-color: rgb(0, 0, 0);
+border-left-color: rgb(17, 17, 17);
 border-left-style: none;
 border-left-width: 0px;
-border-right-color: rgb(0, 0, 0);
+border-right-color: rgb(17, 17, 17);
 border-right-style: none;
 border-right-width: 0px;
-border-top-color: rgb(0, 0, 0);
+border-top-color: rgb(17, 17, 17);
 border-top-style: none;
 border-top-width: 0px;
-color: rgb(0, 0, 0);
+color: rgb(17, 17, 17);
 display: block;
-font-family: 'Times New Roman';
-font-size: 16px;
+float: left;
+font-family: 'Droid Sans', sans-serif;
+font-size: 13px;
 font-style: normal;
 font-weight: normal;
-height: 502px;
-line-height: 16px;
-margin-bottom: 0px;
-margin-left: 461.5px;
-margin-right: 461.5px;
+height: 2516px;
+line-height: 20px;
+margin-bottom: 10px;
+margin-left: 0px;
+margin-right: 0px;
 margin-top: 0px;
-min-height: 100%;
-outline-color: rgb(0, 0, 0);
+outline-color: rgb(17, 17, 17);
 outline-style: none;
 outline-width: 0px;
-padding-bottom: 0px;
+padding-bottom: 25px;
 padding-left: 0px;
 padding-right: 0px;
-padding-top: 0px;
+padding-top: 5px;
 vertical-align: baseline;
-width: 980px;
+width: 100%;
 zoom: 1;
 }
 
@@ -138,4 +140,14 @@ pre
 	background:solid;
 	background-color:#e1ddd9;
 	width:90%;
+}
+ol
+{
+	margin-left:5%;
+	border-left:solid #333 2px;
+}
+li, lh {
+	margin-left:-30px;
+	list-style-type:none;
+	font-size:12pt;
 }
