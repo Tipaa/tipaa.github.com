@@ -151,3 +151,13 @@ li, lh {
 	list-style-type:none;
 	font-size:12pt;
 }
+
+.hover:hover:after{
+    background: none repeat scroll 0 0 #F8F8F8;
+	content:attr(hover);
+    position:absolute;
+	margin-top:-5px;
+	padding:5px;
+    background:#f8f8f8;
+
+}

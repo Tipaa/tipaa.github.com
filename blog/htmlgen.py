@@ -61,6 +61,15 @@ class BlogGuard(Guard):
 		return str.endswith(".blog")
 	def replacement(self, str):
 		return ".html"	
+		
+class StyleSheet(object):
+	def __init__(self,stylesheet=''):
+		self.stylesheet=stylesheet
+	def add(self,str):
+		self.stylesheet = self.stylesheet + str
+	def get(self):
+		return self.stylesheet
+		
 
 global guard
 guard = BlogGuard()
@@ -105,7 +114,7 @@ def parse(script):
 		i += 1
 	return out
 	
-def preprocess(text):
+def preprocess(text,stylesheet):
 	text = re.split('(<code>)|(</code>)|(`)',text)
 	block = 1
 	inline = 2
@@ -122,18 +131,18 @@ def preprocess(text):
 		if t == "<code>" or t == "</code>" or t=="`":
 			None
 		elif iscode > 0:
-			out += codetohtml(t,iscode)
+			out += codetohtml(t,iscode,stylesheet)
 		else:
 			out += t
 
 	return out.replace('</<','&lt;/<').replace('\n','<br>&nbsp;&nbsp;&nbsp;&nbsp;').replace('\r','').replace('\t','&nbsp;&nbsp;&nbsp;&nbsp;')
 	
-def codetohtml(text,type):
+def codetohtml(text,type,stylesheet):
 	block = 1
 	inline = 2
 	out = ''
 	text = text.replace('{','&#123;').replace('}','&#125;')
-	words = re.findall('([a-zA-Z][a-zA-Z0-9]*)',text)	
+	words = re.findall(r'((?<!#123;)\.?[a-zA-Z][a-zA-Z0-9]*(\\hover&#123;(.*)&#125;)?)',text)	
 	
 	wordlist = [w for w in words]
 	index = 0
@@ -141,8 +150,16 @@ def codetohtml(text,type):
 	for w in wordlist:				
 		if w == None:
 			continue
-		text = text[:index] + text[index:].replace(w, "<a class=^"+w+"^>"+w+"</a>",1)
-		index += text[index:].index("<a class=^"+w+"^>"+w+"</a>")+len("<a class=^"+w+"^>"+w+"</a>")
+		(name,hover,h) = w
+		if '\hover' in hover:
+			name = name.replace(hover,"")
+			text = text.replace(hover,"")			
+			text = text[:index] + text[index:].replace(name, "<a class=^"+name+" hover^ hover=^"+h+"^>"+name+"</a>",1)
+			#index += text[index:].index("<a class=^"+name+" hover^>"+name+"</a>")+len("<a class=^"+name+" hover^>"+name+"</a>")
+			stylesheet.add(name+":hover:after{content:\""+h+"\";}")
+		else:
+			text = text[:index] + text[index:].replace(name, "<a class=^"+name+"^>"+name+"</a>",1)
+			index += text[index:].index("<a class=^"+name+"^>"+name+"</a>")+len("<a class=^"+name+"^>"+name+"</a>")
 	index = 0
 	strings = re.findall('(".*?")',text)
 	for s in strings:
@@ -151,7 +168,7 @@ def codetohtml(text,type):
 		newtext = "<span class=\"string\">"+s+"</span>"
 		text = text[:index] + text[index:].replace(s, newtext,1)		
 		index += text[index:].index(newtext)+len(newtext)	
-	text = text.replace('^','"')
+	text = text.replace('^','"').replace("\hover&#123;","")
 	return text
 	
 	
@@ -279,9 +296,9 @@ def main():
 			if guard.ok(f):
 				parts = re.split("\\\\\\\\\n",io.open(f,'rb').read())
 				title = parts[0]
-				text = preprocess(parts[1][1:])
-				style = (parts[2] if (len(parts)>2) else "")
-				html1 = html.replace('{title}',title).replace('{style}',style).replace('{contents}',str(ftitles))#format(title=title, style=style, text='{text}', contents=str(mfiles))
+				style = StyleSheet((parts[2] if (len(parts)>2) else ""))				
+				text = preprocess(parts[1][1:],style)
+				html1 = html.replace('{title}',title).replace('{style}',style.get()).replace('{contents}',str(ftitles))#format(title=title, style=style, text='{text}', contents=str(mfiles))
 				output(mfiles[f],html1,not parts[1][0]== '-',text)
 				
 		if not fcontents == "none":

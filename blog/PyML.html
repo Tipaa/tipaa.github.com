@@ -1,9 +1,13 @@
 <html>
 <head>
 <title>PyML | Edmund Smith</title>
-<style>.html, .head, .title, .style, .body, .ol, .p, .for, .in, .echo
+<style>.for, .in, .echo
 {
 	color:blue;
+}
+.html, .head, .title, .style, .body, .ol, .p, .li
+{
+	color:purple;
 }
 .string
 {
@@ -19,7 +23,7 @@ code
 <body>
 <div id="center">
 <div id="content">
-PyML is a markup system I have created, inspired by PHP. It runs with Python embedded into an html file, and can be either statically processed by the htmlgen.py Python program, or on the fly by similar means.<br>&nbsp;&nbsp;&nbsp;&nbsp;It can either use a template, like I am for my blog, or it can use individual files for each page, akin to php. It looks like<br>&nbsp;&nbsp;&nbsp;&nbsp;<pre><code><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="html">html</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="head">head</a>><<a class="title">title</a>>&#123;<a class="title">title</a>&#125; | <a class="Example">Example</a> <a class="PyML">PyML</a> <a class="page">page</a>&lt;/<a class="title">title</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="style">style</a>>&#123;<a class="style">style</a>&#125;&lt;/<a class="style">style</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<a class="head">head</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="body">body</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="ol">ol</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;!<br>&nbsp;&nbsp;&nbsp;&nbsp;<a class="customers">customers</a> = &#123;<a class="text">text</a>&#125;<br>&nbsp;&nbsp;&nbsp;&nbsp;<a class="for">for</a> <a class="cust">cust</a> <a class="in">in</a> <a class="customers">customers</a>:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="echo">echo</a>(<span class="string">"<<a class="li">li</a>>"</span>+<a class="cust">cust</a>+<span class="string">"&lt;/<a class="li">li</a>>"</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;!><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<a class="ol">ol</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="p">p</a>><a class="Most">Most</a> <a class="recent">recent</a> <a class="order">order</a>: &lt;!<a class="echo">echo</a>(&#123;<a class="text">text</a>&#125;[0])!>&lt;/<a class="p">p</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<a class="html">html</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;</code></pre><br>&nbsp;&nbsp;&nbsp;&nbsp;In PyML, we have three main tags used by the Python engine: <pre><code><a class="title">title</a>, <a class="style">style</a> <a class="and">and</a> <a class="content">content</a></code></pre>. The title is the tite given by the imported texts, the style is the accompanied stylesheet, and text is the main body of the imput from file that you use. The tag <pre><code><a class="contents">contents</a></code></pre> is used instead of text in the contents template, contents.pyml.<br>&nbsp;&nbsp;&nbsp;&nbsp;PyML is still in sporadic development, so this is by no means final. But it already is proving very useful for filling the php niche without being php.<br>&nbsp;&nbsp;&nbsp;&nbsp;
+<h1>PyML</h1><br>&nbsp;&nbsp;&nbsp;&nbsp;PyML is a markup system I have created, inspired by PHP and embedding Python into an HTML file. This can be either statically processed by the htmlgen.py Python program, or on the fly by similar means.<br>&nbsp;&nbsp;&nbsp;&nbsp;It can either use a template, like I am for my blog, or it can use individual files for each page, akin to php. It looks like<br>&nbsp;&nbsp;&nbsp;&nbsp;<pre><code><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="html">html</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="head">head</a>><<a class="title">title</a>>&#123;t<a class="itle">itle</a>&#125; | <a class="Example">Example</a> <a class="PyML">PyML</a> <a class="page">page</a>&lt;/<a class="title">title</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="style">style</a>>&#123;s<a class="tyle">tyle</a>&#125;&lt;/<a class="style">style</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<a class="head">head</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="body">body</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="ol">ol</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;!<br>&nbsp;&nbsp;&nbsp;&nbsp;<a class="customers">customers</a> = &#123;t<a class="ext">ext</a>&#125;<br>&nbsp;&nbsp;&nbsp;&nbsp;<a class="for">for</a> <a class="cust">cust</a> <a class="in">in</a> <a class="customers">customers</a>:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="echo">echo</a>(<span class="string">"<<a class="li">li</a>>"</span>+<a class="cust">cust</a>+<span class="string">"&lt;/<a class="li">li</a>>"</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;!><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<a class="ol">ol</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;<<a class="p">p</a>><a class="Most">Most</a> <a class="recent">recent</a> <a class="order">order</a>: &lt;!<a class="echo">echo</a>(&#123;t<a class="ext">ext</a>&#125;[0])!>&lt;/<a class="p">p</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<a class="html">html</a>><br>&nbsp;&nbsp;&nbsp;&nbsp;</code></pre><br>&nbsp;&nbsp;&nbsp;&nbsp;In PyML, we have three main tags used by the Python engine: <code><a class="title">title</a></code>, <code><a class="style">style</a></code> and <code><a class="content">content</a></code>. <code><a class="title">title</a></code> is the title given by the imported texts, <code><a class="style">style</a></code> is the accompanied per-page stylesheet, and <code><a class="text">text</a></code> is the main body of the imput from file that you use. The tag <code><a class="contents">contents</a></code> is used instead of text in the contents template, contents.pyml.<br>&nbsp;&nbsp;&nbsp;&nbsp;PyML is still in sporadic development, so this is by no means final. But it already is proving very useful for filling the php niche without being php.<br>&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 </div>
 <div class="right" id="right">
@@ -29,6 +33,6 @@ PyML is a markup system I have created, inspired by PHP. It runs with Python emb
 </ol>
 </div>
 <div class="footer" id="footer">Generated by Pyml<br>
-22/07/13 at 00:45</div>
+22/07/13 at 02:12</div>
 </body>
 </html>
